@@ -2,26 +2,18 @@ let { posts } = require("../data/db");
 
 const index = (req, res) => {
   console.log("richiesta ricevuta route: Home");
-  const id = parseInt(req.query.id);
-  console.log("queryString: id:" + id);
-  if (!isNaN(id)) {
-    const post = posts.find((post) => post.id === id);
-    if (!post) {
-      res.header({ "Access-Control-Allow-Origin": "*" });
-      res
-        .status(404)
-        .json({ status: 404, success: "ok", message: "post not found" });
-
-      return;
-    }
-
-    res.header({ "Access-Control-Allow-Origin": "*" });
-    res.status(200).json({ status: 200, success: "ok", data: post });
-
-    return;
+  const { title, tags } = req.query;
+  let filteredPosts = posts;
+  console.log(title, tags);
+  if (tags) {
+    filteredPosts = filteredPosts.filter((post) => post.tags.includes(tags));
   }
+  if (title) {
+    filteredPosts = filteredPosts.filter((post) => post.tags.includes(tags));
+  }
+
   res.header({ "Access-Control-Allow-Origin": "*" });
-  res.status(200).json({ status: 200, success: "ok", data: posts });
+  res.status(200).json({ status: 200, success: "ok", data: filteredPosts });
 };
 
 const show = (req, res) => {
