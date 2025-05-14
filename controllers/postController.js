@@ -12,7 +12,6 @@ const index = (req, res) => {
     filteredPosts = filteredPosts.filter((post) => post.tags.includes(tags));
   }
 
-  res.header({ "Access-Control-Allow-Origin": "*" });
   res.status(200).json({ status: 200, success: "ok", data: filteredPosts });
 };
 
@@ -21,7 +20,6 @@ const show = (req, res) => {
   console.log("richiesta per il post: " + id);
 
   const post = posts.find((post) => post.id === id);
-
   res.header({ "Access-Control-Allow-Origin": "*" });
   if (!post) {
     res
@@ -34,9 +32,11 @@ const show = (req, res) => {
 
 const store = (req, res) => {
   const { title, content, image, tags } = req.body; // destructure body of request
+  console.log(title, content, image, tags);
+
+  res.header({ "Access-Control-Allow-Origin": "*" });
 
   if (title.length <= 0 && content.length <= 0) {
-    res.header({ "Access-Control-Allow-Origin": "*" });
     res.status(400).json({
       status: 400,
       success: "ko",
@@ -49,8 +49,6 @@ const store = (req, res) => {
   const id = posts[posts.length - 1].id + 1; // generate id
   const post = { id, title, content, image, tags }; // create new post
   posts.push(post); // add new post in array
-
-  res.header({ "Access-Control-Allow-Origin": "*" });
   res.status(201).json({ status: 201, success: "ok", data: post });
 };
 
@@ -97,7 +95,6 @@ const destroy = (req, res) => {
   console.log("richiesta l'eliminazione del post: " + id);
   const post = posts.find((post) => post.id === id);
 
-  res.header({ "Access-Control-Allow-Origin": "*" });
   if (!post) {
     res
       .status(404)
@@ -107,7 +104,7 @@ const destroy = (req, res) => {
 
   //   posts = posts.filter((post) => post.id !== id);
   posts.splice(posts.indexOf(post), 1);
-  res.status(200).json({ status: 200, success: "ok", data: posts });
+  res.status(204);
 };
 
 module.exports = { index, show, store, update, modify, destroy };

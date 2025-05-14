@@ -1,32 +1,35 @@
-const pageTitle = document.getElementById("page-title");
-const btnChangeTitle = document.getElementById("change-title");
 const btnGetPosts = document.getElementById("get-posts");
-const postsList = document.getElementById("posts-list");
 const btnGetPost = document.getElementById("get-post");
+const btnFindPost = document.getElementById("find-post");
+const btnAddPost = document.getElementById("add-post");
+
+const postsList = document.getElementById("posts-list");
+
 const formGetPost = document.getElementById("form-get-post");
 const formFindPost = document.getElementById("form-find-post");
+const formAddPost = document.getElementById("form-add-post");
+
 const btnSubmitGetForm = document.getElementById("btn-form-get");
 const btnSubmitFindForm = document.getElementById("btn-form-find");
-const idFormField = document.getElementById("id");
-const btnFindPost = document.getElementById("find-post");
+const btnSubmitAddForm = document.getElementById("btn-form-add");
+
+const idFormFieldGet = document.getElementById("id");
+
+const titleFormFieldAdd = document.getElementById("title-field");
+const contentFormFieldAdd = document.getElementById("content-field");
+const imgFormFieldAdd = document.getElementById("img-field");
+const tagsFormFieldAdd = document.getElementById("tags-field");
 
 const getPosts = () => {
   formGetPost.classList.add("d-none");
   formFindPost.classList.add("d-none");
   postsList.classList.remove("d-none");
+  formAddPost.classList.add("d-none");
   const url = "http://127.0.0.1:3000/posts";
   axios.get(url).then((res) => {
     console.log(res.data.data);
     const listItems = createlistItems(res.data.data);
     postsList.innerHTML = listItems;
-  });
-};
-
-const changeTitle = () => {
-  const url = "http://127.0.0.1:3000";
-  axios.get(url).then((res) => {
-    pageTitle.innerText = res.data;
-    console.log(res);
   });
 };
 
@@ -64,10 +67,11 @@ const showFormPost = () => {
   postsList.classList.add("d-none");
   formFindPost.classList.add("d-none");
   formGetPost.classList.remove("d-none");
+  formAddPost.classList.add("d-none");
 };
 
 const getPost = () => {
-  const idForm = idFormField.value;
+  const idForm = idFormFieldGet.value;
   const url = `http://127.0.0.1:3000/posts/${idForm}`;
   axios
     .get(url)
@@ -89,12 +93,43 @@ const findPost = () => {
   postsList.classList.add("d-none");
   formGetPost.classList.add("d-none");
   formFindPost.classList.remove("d-none");
+  formAddPost.classList.add("d-none");
+};
+
+const showAddForm = () => {
+  postsList.classList.add("d-none");
+  formGetPost.classList.add("d-none");
+  formFindPost.classList.add("d-none");
+  formAddPost.classList.remove("d-none");
+};
+
+const addPost = () => {
+  const title = titleFormFieldAdd.value;
+  const content = contentFormFieldAdd.value;
+  const image = imgFormFieldAdd.value;
+  const tags = tagsFormFieldAdd.value;
+  const post = { title, content, image, tags };
+  const url = "http://127.0.0.1:3000/posts/";
+  axios
+    .post(url, post)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 btnGetPosts.addEventListener("click", getPosts);
 btnGetPost.addEventListener("click", showFormPost);
+btnFindPost.addEventListener("click", findPost);
+btnAddPost.addEventListener("click", showAddForm);
+
 btnSubmitGetForm.addEventListener("click", (e) => {
   e.preventDefault();
   getPost();
 });
-btnFindPost.addEventListener("click", findPost);
+btnSubmitAddForm.addEventListener("click", (e) => {
+  e.preventDefault();
+  addPost();
+});
