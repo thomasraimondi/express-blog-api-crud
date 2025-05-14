@@ -2,14 +2,23 @@ let { posts } = require("../data/db");
 
 const index = (req, res) => {
   console.log("richiesta ricevuta route: Home");
-  const { title, tags } = req.query;
+  title = req.query.title;
+  tags = req.query.tags;
   let filteredPosts = posts;
   console.log(title, tags);
   if (tags) {
     filteredPosts = filteredPosts.filter((post) => post.tags.includes(tags));
   }
   if (title) {
-    filteredPosts = filteredPosts.filter((post) => post.tags.includes(tags));
+    filteredPosts = filteredPosts.filter((post) => post.title.includes(title));
+  }
+
+  if (filteredPosts.length <= 0) {
+    res
+      .status(200)
+      .json({ status: 200, success: "ok", message: "No Item Found" });
+
+    return;
   }
 
   res.status(200).json({ status: 200, success: "ok", data: filteredPosts });
