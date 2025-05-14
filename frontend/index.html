@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="../node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <script src="./js/main.js" defer></script>
+    <script src="../node_modules/axios/dist/axios.min.js" defer></script>
+    <script
+      src="../node_modules/bootstrap/dist/js/bootstrap.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="page-title" class="text-center">Axios call Node Js</h1>
+    </div>
+    <div class="container">
+      <div class="buttons text-center m-4">
+        <button id="get-posts" class="btn btn-primary" type="button">
+          Get Posts
+        </button>
+        <button id="get-post" class="btn btn-primary" type="button">
+          Get Post
+        </button>
+      </div>
+      <form
+        id="form-get-post"
+        action="http://127.0.0.1:3000/posts/"
+        method="get"
+        class="d-none"
+      >
+        <div class="mb-3">
+          <label for="id" class="form-label">Id Post</label>
+          <input type="number" class="form-control" id="id" name="id" />
+        </div>
+        <button id="btn-form" class="btn btn-primary">Submit</button>
+      </form>
+      <div id="posts-list" class="row d-none"></div>
+    </div>
+  </body>
+</html>

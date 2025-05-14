@@ -1,0 +1,18 @@
+{
+  "name": "express-blog-api-crud",
+  "version": "1.0.0",
+  "description": "personal blog",
+  "main": "app.js",
+  "scripts": {
+    "dev": "node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Raimondi",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.6",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
+}
