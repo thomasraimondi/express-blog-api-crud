@@ -41,23 +41,45 @@ const show = (req, res) => {
 
 const store = (req, res) => {
   const { title, content, image, tags } = req.body; // destructure body of request
-  console.log(title, content, image, tags);
 
-  res.header({ "Access-Control-Allow-Origin": "*" });
+  const malformatElements = [];
 
-  if (title.length <= 0 && content.length <= 0) {
+  if (!title || typeof title !== "string" || title.length < 3) {
+    malformatElements.push("title");
+  }
+  if (!content || typeof content !== "string" || content.length < 3) {
+    malformatElements.push("content");
+  }
+  if (typeof image !== "string" || image.length < 3) {
+    malformatElements.push("image");
+  }
+  if (!Array.isArray(tags)) {
+    malformatElements.push("tags");
+  }
+
+  if (malformatElements.length) {
     res.status(400).json({
       status: 400,
       success: "ko",
-      message: "title and content are empty",
+      message: "element malformat",
+      malformatElements,
     });
 
     return;
   }
 
-  const id = posts[posts.length - 1].id + 1; // generate id
-  const post = { id, title, content, image, tags }; // create new post
+  // const id = posts[posts.length - 1].id + 1; // generate id
+
+  let maxId = 0;
+  for (const post of posts) {
+    if (post.id > maxId) maxId = post.id;
+  }
+
+  const postId = maxId + 1;
+
+  const post = { id: postId, title, content, image, tags }; // create new post
   posts.push(post); // add new post in array
+
   res.status(201).json({ status: 201, success: "ok", data: post });
 };
 
