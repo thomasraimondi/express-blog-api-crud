@@ -138,13 +138,12 @@ const update = (req, res) => {
 
 const modify = (req, res) => {
   const id = parseInt(req.params.id);
+
   console.log("richiesta la modifica del post: " + id);
 
-  const post = posts.find((post) => post.id === id);
+  const originalPost = posts.find((post) => post.id === id);
 
-  res.header({ "Access-Control-Allow-Origin": "*" });
-
-  if (!post) {
+  if (!originalPost) {
     res
       .status(404)
       .json({ status: 404, success: "ko", data: "post not found" });
@@ -152,7 +151,42 @@ const modify = (req, res) => {
     return;
   }
 
-  res.status(202).json({ status: 202, success: "ok", data: post });
+  const title = req.body.title ?? originalPost.title;
+  const content = req.body.content ?? originalPost.content;
+  const image = req.body.image ?? originalPost.image;
+  const tags = req.body.tags ?? originalPost.tags;
+
+  const malformatElements = [];
+
+  if (typeof title !== "string" || title.length < 3) {
+    malformatElements.push("title");
+  }
+  if (typeof content !== "string" || content.length < 3) {
+    malformatElements.push("content");
+  }
+  if (typeof image !== "string") {
+    malformatElements.push("image");
+  }
+  if (!Array.isArray(tags)) {
+    malformatElements.push("tags");
+  }
+
+  if (malformatElements.length) {
+    res.status(400).json({
+      status: 400,
+      success: "ko",
+      message: "element malformat",
+      malformatElements,
+    });
+
+    return;
+  }
+  originalPost.title = title;
+  originalPost.content = content;
+  originalPost.image = image;
+  originalPost.tags = tags;
+
+  res.status(200).json({ status: 200, success: "ok", data: originalPost });
 };
 
 const destroy = (req, res) => {
