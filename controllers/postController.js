@@ -68,16 +68,15 @@ const store = (req, res) => {
     return;
   }
 
-  // const id = posts[posts.length - 1].id + 1; // generate id
-
   let maxId = 0;
   for (const post of posts) {
     if (post.id > maxId) maxId = post.id;
   }
 
-  const postId = maxId + 1;
+  const postId = maxId + 1; // generate post id
 
   const post = { id: postId, title, content, image, tags }; // create new post
+
   posts.push(post); // add new post in array
 
   res.status(201).json({ status: 201, success: "ok", data: post });
@@ -97,8 +96,6 @@ const update = (req, res) => {
 
     return;
   }
-
-  // const { title, content, image, tags } = req.body; // destructure body of request
 
   const title = req.body.title ?? originalPost.title;
   const content = req.body.content ?? originalPost.content;
@@ -133,6 +130,7 @@ const update = (req, res) => {
 
   const updatedPost = { id: originalPost.id, title, content, image, tags };
   posts.splice(posts.indexOf(originalPost), 1, updatedPost);
+
   res.status(200).json({ status: 200, success: "ok", data: updatedPost });
 };
 
