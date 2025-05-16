@@ -1,6 +1,8 @@
 let { posts } = require("../data/db");
 
 const index = (req, res) => {
+  console.log(abc);
+
   console.log("richiesta ricevuta route: Home");
   title = req.query.title;
   tags = req.query.tags;

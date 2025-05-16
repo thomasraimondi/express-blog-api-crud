@@ -1,6 +1,6 @@
 const notFound = (req, res, next) => {
-  console.log("page not found");
-  res.json("ciao2");
+  res.status(404);
+  res.json("page not found");
 };
 
 module.exports = notFound;
