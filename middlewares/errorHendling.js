@@ -1,7 +1,9 @@
 const errorHendling = (err, req, res, next) => {
   console.log("middleware gestione errori");
-  res.status(500);
-  res.json(err.message);
+  const statusCode = err.statusCode ?? 500;
+
+  res.status(statusCode);
+  res.json({ message: err.message, responseData: err.data });
 };
 
 module.exports = errorHendling;

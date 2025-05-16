@@ -16,8 +16,8 @@ app.use(requestTime);
 
 app.use("/posts", routerPost);
 
-app.use(errorHendling);
 app.use(notFound);
+app.use(errorHendling);
 
 app.listen(appPort, () => {
   console.log(`Server in ascolto: ${appUrl}`);

@@ -1,6 +1,7 @@
 const notFound = (req, res, next) => {
-  res.status(404);
-  res.json("page not found");
+  const error = new Error("page not found");
+  error.status = 404;
+  throw error;
 };
 
 module.exports = notFound;

@@ -30,15 +30,14 @@ const show = (req, res) => {
   const id = parseInt(req.params.id);
   console.log("richiesta per il post: " + id);
 
-  const post = posts.find((post) => post.id === id);
+  const originalPost = posts.find((post) => post.id === id);
   res.header({ "Access-Control-Allow-Origin": "*" });
-  if (!post) {
-    res
-      .status(404)
-      .json({ status: 404, success: "ko", message: "post not found" });
-    return;
+  if (!originalPost) {
+    const error = new Error("Item not found");
+    error.statusCode = 404;
+    throw error;
   }
-  res.status(200).json({ status: 200, success: "ok", data: post });
+  res.status(200).json({ status: 200, success: "ok", data: originalPost });
 };
 
 const store = (req, res) => {
@@ -60,14 +59,10 @@ const store = (req, res) => {
   }
 
   if (malformatElements.length) {
-    res.status(400).json({
-      status: 400,
-      success: "ko",
-      message: "element malformat",
-      malformatElements,
-    });
-
-    return;
+    const error = new Error("element malformat");
+    error.statusCode = 400;
+    error.data = { malformatElements };
+    throw error;
   }
 
   let maxId = 0;
@@ -92,11 +87,9 @@ const update = (req, res) => {
   const originalPost = posts.find((post) => post.id === id);
 
   if (!originalPost) {
-    res
-      .status(404)
-      .json({ status: 404, success: "ko", data: "post not found" });
-
-    return;
+    const error = new Error("Item not found");
+    error.statusCode = 404;
+    throw error;
   }
 
   const title = req.body.title ?? originalPost.title;
@@ -120,14 +113,10 @@ const update = (req, res) => {
   }
 
   if (malformatElements.length) {
-    res.status(400).json({
-      status: 400,
-      success: "ko",
-      message: "element malformat",
-      malformatElements,
-    });
-
-    return;
+    const error = new Error("element malformat");
+    error.statusCode = 400;
+    error.data = { malformatElements };
+    throw error;
   }
 
   const updatedPost = { id: originalPost.id, title, content, image, tags };
@@ -144,11 +133,9 @@ const modify = (req, res) => {
   const originalPost = posts.find((post) => post.id === id);
 
   if (!originalPost) {
-    res
-      .status(404)
-      .json({ status: 404, success: "ko", data: "post not found" });
-
-    return;
+    const error = new Error("Item not found");
+    error.statusCode = 404;
+    throw error;
   }
 
   const title = req.body.title ?? originalPost.title;
@@ -172,15 +159,12 @@ const modify = (req, res) => {
   }
 
   if (malformatElements.length) {
-    res.status(400).json({
-      status: 400,
-      success: "ko",
-      message: "element malformat",
-      malformatElements,
-    });
-
-    return;
+    const error = new Error("element malformat");
+    error.statusCode = 400;
+    error.data = { malformatElements };
+    throw error;
   }
+
   originalPost.title = title;
   originalPost.content = content;
   originalPost.image = image;
@@ -194,11 +178,10 @@ const destroy = (req, res) => {
   console.log("richiesta l'eliminazione del post: " + id);
   const post = posts.find((post) => post.id === id);
 
-  if (!post) {
-    res
-      .status(404)
-      .json({ status: 404, success: "ko", message: "post not found" });
-    return;
+  if (!originalPost) {
+    const error = new Error("Item not found");
+    error.statusCode = 404;
+    throw error;
   }
 
   //   posts = posts.filter((post) => post.id !== id);
