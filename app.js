@@ -1,8 +1,8 @@
 //* Imports
 const routerPost = require("./routers/posts");
-const requestTime = require("./middlewares/requestTime");
-const errorHendling = require("./middlewares/errorHendling");
-const notFound = require("./middlewares/notFoundError");
+const requestTime = require("./middlewares/Global/requestTime");
+const errorHendling = require("./middlewares/ErrorHandling/errorHendling");
+const notFound = require("./middlewares/ErrorHandling/notFoundError");
 
 // * App Config
 const express = require("express");
@@ -12,6 +12,7 @@ const { appPort, appUrl } = require("./data/db");
 // * static Asset
 app.use(express.static("public"));
 app.use(express.json());
+
 app.use(requestTime);
 
 app.use("/posts", routerPost);
